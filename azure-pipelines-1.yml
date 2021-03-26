@@ -41,16 +41,19 @@ stages:
             dotnet build extensions.csproj --output ./bin
         fi
         pip install --target="./.python_packages/lib/site-packages" -r ./requirements.txt
+      workingDirectory: $(workingDirectory)
+
     - task: ArchiveFiles@2
-      displayName: "Archive files"
+      displayName: 'Archive files'
       inputs:
-        rootFolderOrFile: "$(System.DefaultWorkingDirectory)"
+        rootFolderOrFile: '$(workingDirectory)'
         includeRootFolder: false
-        archiveFile: "$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip"
-    - task: PublishBuildArtifacts@1
-      inputs:
-        PathtoPublish: '$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip'
-        artifactName: 'drop'
+        archiveType: zip
+        archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+        replaceExistingArchive: true
+
+    - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+      artifact: drop
 
 - stage: Deploy
   displayName: Deploy stage
@@ -63,11 +66,9 @@ stages:
     environment: 'development'
     pool:
       vmImage: ubuntu-18.04
-
     strategy:
       runOnce:
         deploy:
-
           steps:
           - task: AzureFunctionApp@1
             displayName: 'Azure functions app deploy'
@@ -75,4 +76,4 @@ stages:
               azureSubscription: '$(azureSubscription)'
               appType: functionAppLinux
               appName: $(functionAppName)
-              package: '$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip'
+              package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
