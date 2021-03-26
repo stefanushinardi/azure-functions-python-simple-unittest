@@ -75,4 +75,4 @@ stages:
               azureSubscription: '$(azureSubscription)'
               appType: functionAppLinux
               appName: $(functionAppName)
-              package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
+              package: '$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip'
