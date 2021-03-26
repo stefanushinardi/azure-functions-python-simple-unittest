@@ -11,7 +11,7 @@ variables:
   azureSubscription: 'c3b2e4ed-c196-42d8-a936-86caf6fc4dc2'
 
   # Function app name
-  functionAppName: 'py39-shinardi-test-portal-creation'
+  functionAppName: 'linux-python36-ado'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -41,7 +41,7 @@ stages:
     - task: UsePythonVersion@0
       displayName: 'Use Python 3.9'
       inputs:
-        versionSpec: 3.9 # Functions V2 supports Python 3.6 as of today
+        versionSpec: 3.6 # Functions V2 supports Python 3.6 as of today
 
     - bash: |
         python -m venv worker_venv
