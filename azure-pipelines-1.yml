@@ -11,7 +11,7 @@ variables:
   azureSubscription: '13afed49-1401-4a59-9e51-444b83199b34'
 
   # Function app name
-  functionAppName: 'linux-python36-ado'
+  functionAppName: 'pipeline-python-39-shinardi-consumption'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -39,15 +39,16 @@ stages:
       displayName: 'Build extensions'
 
     - task: UsePythonVersion@0
-      displayName: 'Use Python 3.6'
+      displayName: 'Use Python 3.9'
       inputs:
-        versionSpec: 3.6 # Functions V2 supports Python 3.6 as of today
+        versionSpec: 3.9 # Functions V2 supports Python 3.6 as of today
 
     - bash: |
-        python -m venv worker_venv
-        source worker_venv/bin/activate
-        pip install -r requirements.txt
-      workingDirectory: $(workingDirectory)
+        if [ -f extensions.csproj ]
+        then
+          dotnet build extensions.csproj --output ./bin
+        fi
+        pip install --target="./.python_packages/lib/site-packages" -r ./requirements.txt
       displayName: 'Install application dependencies'
 
     - task: ArchiveFiles@2
