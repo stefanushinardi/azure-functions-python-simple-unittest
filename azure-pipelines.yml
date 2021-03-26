@@ -47,6 +47,7 @@ stages:
         python3.6 -m venv worker_venv
         source worker_venv/bin/activate
         pip3.6 install -r requirements.txt
+        pip3.6 install setuptools
       workingDirectory: $(workingDirectory)
       displayName: 'Install application dependencies'
 
