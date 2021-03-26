@@ -7,7 +7,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
 
     name = req.params.get('name')
-
+    pyodbc.connect()
+    
     if name:
         return func.HttpResponse(name, status_code=200)
     else:
