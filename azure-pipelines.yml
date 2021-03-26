@@ -44,9 +44,9 @@ stages:
         versionSpec: 3.6 # Functions V2 supports Python 3.6 as of today
 
     - bash: |
-        python -m venv worker_venv
+        python3.6 -m venv worker_venv
         source worker_venv/bin/activate
-        pip install -r requirements.txt
+        pip3.6 install -r requirements.txt
       workingDirectory: $(workingDirectory)
       displayName: 'Install application dependencies'
 
